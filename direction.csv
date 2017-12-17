@@ -1,0 +1,30 @@
+i want to know the direction to @location@ from @location@
+give me the direction from @location@ to @location@
+give me the direction to @location@ from @location@
+i want to know the direction to @location@ from @location@ through @transportation@
+i want to know the direction to @location@ from @location@ by @transportation@
+give me the direction from @location@ to @location@ through @transportation@
+give me the direction from @location@ to @location@ by @transportation@
+give me the direction to @location@ from @location@ through @transportation@
+give me the direction to @location@ from @location@ by @transportation@
+what is the direction between @location@ and @location@ through @transportation@
+what is the direction between @location@ and @location@ by @transportation@
+what is the direction between @location@ and @location@ through riding @transportation@
+what is the direction between @location@ and @location@ by riding @transportation@
+give me the direction to @location@ from @location@ through riding @transportation@
+give me the direction to @location@ from @location@ by riding @transportation@
+i want to know the direction to @location@ from @location@ and avoid @restriction
+give me the direction from @location@ to @location@ and avoid @restriction
+give me the direction to @location@ from @location@ and avoid @restriction
+i want to know the direction to @location@ from @location@ through @transportation@ and avoid @restriction
+i want to know the direction to @location@ from @location@ by @transportation@ and avoid @restriction
+give me the direction from @location@ to @location@ through @transportation@ and avoid @restriction
+give me the direction from @location@ to @location@ by @transportation@ and avoid @restriction
+give me the direction to @location@ from @location@ through @transportation@ and avoid @restriction
+give me the direction to @location@ from @location@ by @transportation@ and avoid @restriction
+what is the direction between @location@ and @location@ through @transportation@ and avoid @restriction
+what is the direction between @location@ and @location@ by @transportation@ and avoid @restriction
+what is the direction between @location@ and @location@ through riding @transportation@ and avoid @restriction
+what is the direction between @location@ and @location@ by riding @transportation@ and avoid @restriction
+give me the direction to @location@ from @location@ through riding @transportation@ and avoid @restriction
+give me the direction to @location@ from @location@ by riding @transportation@ and avoid @restriction

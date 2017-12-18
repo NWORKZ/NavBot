@@ -1,4 +1,4 @@
-from utils import log,send_list
+from utils import log,send_list_large,send_list_compact
 from flask import Flask, request
 from pymessenger.bot import Bot
 from maps import Maps
@@ -33,21 +33,31 @@ def webhook():
 					if 'text' in message_details:
 						#insert the query processing here
 						rcv_msg = message_details['text'].lower()
-						if 'go' in rcv_msg:#to be deleted
-							#please wait message
-							messenger_bot.send_text_message(sender,"Okay! Please wait I am looking it up now.")
-							if gmaps.get_direction(rcv_msg) is not None:
-								#messenger_bot.send_generic_message(sender,gmaps.get_direction(rcv_msg))
-								send_list(facebook_PAT,sender,gmaps.get_direction(rcv_msg))
-							else:
-								messenger_bot.send_text_message(sender,"I can't find any routes for that")
-						else:
-							messenger_bot.send_text_message(sender,'wrong keyword')#to be deleted
+						#add a tripple dot here for typing
+						response = gmaps.start_query(rcv_msg)
+						send_response(sender,response)
 					else:						
 						messenger_bot.send_text_message(sender,"Sorry, I don't understand that")
 
 	return 'ok', 200
 
+def send_response(receiver,response):
+	if response is not None:
+		log(len(response))
+		if len(response) <= 4:
+			send_list_large(facebook_PAT,receiver,response)
+		else:
+			index = 0
+			while index < len(response):
+				if index == 0:
+					send_list_large(facebook_PAT,receiver,response[index:index+4])
+				elif index - len(response) == 1:
+					messenger_bot.send_genic_message(receiver,response[-1])
+				else:
+					send_list_compact(facebook_PAT,receiver,response[index:index+4])
+				index = index + 3	
+	else:
+		messenger_bot.send_text_message(receiver,"I can't find any routes for that")
 
 if __name__ == '__main__':
 	app.run(debug = True, port = 80)

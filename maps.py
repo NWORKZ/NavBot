@@ -1,6 +1,4 @@
 from utils import extract_info, csv_reader, log
-import re
-import json
 import googlemaps
 
 class Maps:
@@ -15,32 +13,40 @@ class Maps:
 		self.gmaps = googlemaps.Client(key = api_key)
 
 	def start_query(self,query):
-		'''
-			TODO : SPEPARATE EACH SECTION INTO A FUNCTION
-			limit every function in 25 lines
-		'''
-
-		#request starts here ---- SECTION ----
-		'''
-			TODO:
-				ADD A SECTION FOR self.gmaps.direction with TRANSIT MODE and AVOIDS
-		'''
 		extracted_info = self.begin_extract_info(query)
 		try:
-			direction_results = self.gmaps.directions(extracted_info[0],extracted_info[1])
-			log(str(direction_results) + "\n")
-
-			if len(direction_results) < 0:
-				return None
-
-			result_info_payload,result_info_steps = self.get_primary_info(direction_results)
-			
-			return self.get_steps(result_info_steps,result_info_payload)
-		
+			return self.map_request(extracted_info)
 		except Exception as e:
 			log(e)
 			return None
 
+	def map_request(self,extracted_info):
+		if extracted_info[1] == 2:
+			direction_results = self.gmaps.directions(extracted_info[0][0],extracted_info[0][1])#normal
+			if len(direction_results) < 0:
+				return None
+		elif extracted_info[1] == 3.1:
+			#add a synonym words
+			direction_results = self.gmaps.directions(extracted_info[0][0],extracted_info[0][1],avoid=extracted_info[0,2])#avoid
+			if len(direction_results) < 0:
+				return None				
+		elif extracted_info[1] == 3.2:
+			#add a synonym words
+			if extracted_info == 'bike' or extracted_info == 'bicycle':
+				direction_results = self.gmaps.directions(extracted_info[0][0],extracted_info[0][1],mode='bicycling')#transit
+			else:
+				direction_results = self.gmaps.directions(extracted_info[0][0],extracted_info[0][1],mode=extracted_info[0][2])#transit
+			if len(direction_results) < 0:
+				return None				
+		elif extracted_info[1] == 4:
+			direction_results = self.gmaps.directions(extracted_info[0][0],extracted_info[0][1],mode=extracted_info[0][2],avoid=extracted_info[0][3])#transit
+			if len(direction_results) < 0:
+				return None				
+
+		result_info_payload,result_info_steps = self.get_primary_info(direction_results)
+		
+		return self.get_steps(result_info_steps,result_info_payload)
+	
 	def get_primary_info(self,direction_results):
 		for direction_result in direction_results:
 			for leg_info in direction_result['legs']:
@@ -74,21 +80,29 @@ class Maps:
 		return original_payload
 	
 	def begin_extract_info(self,query):
-		#data extraction starts here ---- SECTION ----
-		'''
-			TODO:
-				extract transit modes,and avoids
-		'''
 		if 'far' in query or 'long' in query or 'distance' in query or 'time' in query:
 			base_query = csv_reader('distancetime.csv')
 		else:
 			base_query = csv_reader('direction.csv')
 
-		extracted_info = extract_info(base_query,query)
-		#reverse the TO and FROM if 'TO' comes first
-		if query.find('to') > query.find('from'):
-			extracted_info[0],extracted_info[1] = extracted_info[1],extracted_info[0]
-		
+		extracted_info = extract_info(base_query,query)		
 		log("inf : " + str(extract_info(base_query,query)))
+		log(query.find('to') < query.find('from'))
 
-		return extracted_info
+		#this causes a bug
+		if query.find('to') < query.find('from'):#reverse the TO and FROM if 'TO' comes first
+			extracted_info[0],extracted_info[1] = extracted_info[1],extracted_info[0]
+
+		if len(extracted_info) == 4:
+			if query.find('avoid') < query.find('by'):#reverse avoid and by of avoid comes first
+				extracted_info[2], extracted_info[3] = extracted_info[3], extracted_info[2]
+				return [extracted_info,4]
+		
+		#if only avoid
+		if 'avoid' in query and 'by' not in query:
+			return [extracted_info,3.1]
+		#if only by
+		if 'avoid' not in query and 'by' in query:
+			return [extracted_info,3.2]
+
+		return [extracted_info,2]

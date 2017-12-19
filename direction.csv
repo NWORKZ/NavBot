@@ -16,3 +16,4 @@ what is the direction between @location@ and @location@ through riding @transpor
 what is the direction between @location@ and @location@ by riding @transportation@ and avoid @restriction
 give me the direction to @location@ from @location@ through riding @transportation@ and avoid @restriction
 give me the direction to @location@ from @location@ by riding @transportation@ and avoid @restriction
+give me the direction to @location@ from @location@ by riding @transportation@ while avoiding @restriction

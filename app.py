@@ -1,6 +1,7 @@
-from utils import log,send_list_large,send_list_compact
+from utils import log
+from messengerutils import Botc #custom
+from pymessenger.bot import Bot #github
 from flask import Flask, request
-from pymessenger.bot import Bot
 from maps import Maps
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ facebook_verify_token = 'verify_me'
 google_api_key = 'AIzaSyBCWB1CSipmOAoSiPCSM7f7jrbSYqdqvcs'
 
 messenger_bot = Bot(facebook_PAT)
+messenger_bot_c = Botc(facebook_PAT)
 gmaps = Maps(google_api_key)
 
 @app.route('/', methods=['GET'])
@@ -31,13 +33,19 @@ def webhook():
 				if 'message' in msging_detail:
 					message_details = msging_detail['message']
 					if 'text' in message_details:
-						#insert the query processing here
+						messenger_bot_c.mark_seen(sender)
+						
 						rcv_msg = message_details['text'].lower()
-						#add a tripple dot here for typing
 						response = gmaps.start_query(rcv_msg)
+						
+						messenger_bot_c.show_typing(sender)
+						
 						send_response(sender,response)
-					else:						
+					else:
+						messenger_bot_c.mark_seen(sender)						
+						messenger_bot_c.show_typing(sender)
 						messenger_bot.send_text_message(sender,"Sorry, I don't understand that")
+						messenger_bot_c.hide_typing(sender)
 
 	return 'ok', 200
 
@@ -45,19 +53,21 @@ def send_response(receiver,response):
 	if response is not None:
 		log(len(response))
 		if len(response) <= 4:
-			send_list_large(facebook_PAT,receiver,response)
+			messenger_bot_c.send_list_large(receiver,response)
 		else:
 			index = 0
 			while index < len(response):
 				if index == 0:
-					send_list_large(facebook_PAT,receiver,response[index:index+4])
+					messenger_bot_c.send_list_large(receiver,response[index:index+4])
 				elif index - len(response) == 1:
 					messenger_bot.send_genic_message(receiver,response[-1])
 				else:
-					send_list_compact(facebook_PAT,receiver,response[index:index+4])
+					messenger_bot_c.send_list_compact(receiver,response[index:index+4])
 				index = index + 3	
 	else:
 		messenger_bot.send_text_message(receiver,"I can't find any routes for that")
+
+	messenger_bot_c.hide_typing(receiver)
 
 if __name__ == '__main__':
 	app.run(debug = True, port = 80)

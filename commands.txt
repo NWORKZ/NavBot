@@ -1,0 +1,17 @@
+1. open cmd
+2. enter
+	cd env/Scripts
+	activate
+	cd..
+	cd..
+	python app.py
+
+3.open cmd
+	ngrok http 80
+
+
+4. open facebook developer's account
+	MYAPPS -> NAVCHAT
+	WEBHOOKS -> EDIT SUBSCRIPTION
+		-> COPY PASTE THE LINK FROM NGROK E.g. https://330efd19.ngrok.io
+		->set verify token to "verify_me"

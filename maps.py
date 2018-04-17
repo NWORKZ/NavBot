@@ -85,11 +85,14 @@ class Maps:
 		else:
 			base_query = csv_reader('direction.csv')
 
+		if 'how to' in query:
+			query = query.replace('how to','')
+		elif 'i want to' in query:
+			query = query.replace('i want to','')
+
 		extracted_info = extract_info(base_query,query)		
 		log("inf : " + str(extract_info(base_query,query)))
-		log(query.find('to') < query.find('from'))
 
-		#this causes a bug
 		if query.find('to') < query.find('from'):#reverse the TO and FROM if 'TO' comes first
 			extracted_info[0],extracted_info[1] = extracted_info[1],extracted_info[0]
 

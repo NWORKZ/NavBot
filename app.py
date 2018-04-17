@@ -6,7 +6,7 @@ from maps import Maps
 
 app = Flask(__name__)
 
-facebook_PAT = 'EAAFWsHcePX8BALl1ZA0o15A1IdGqhkqzZCUQtIG34CVQJZBrMCHZAJYUZBoB24xPWkfPYFawVms4fMzPPLpeRI1mjnhAsSqZCdYqcQlNuwXpLkZCA71vfE6g9hExv9o8txmZCZA63HfpclSrwKDrlogH55KDZA8RnMZBTRMf4KBmEiuzZBQQAUXFG88G'
+facebook_PAT = 'EAAEqKYCvnZAgBAJV7XoVY9QBOWCGbhkbivmnC0gzlD1KWRSkGwTbUFmc6cJEYIX1cr1MNAEj30yzS9ZAygZADRZC7YDSPLpT4yjQf7HoW6fvvTiqF2WgtagZAOZCZC7bbpfmxVX2Xtqh7EN8UUbFnSrk4pZCGtv0vBlgUrCjgQGxJgZDZD'
 facebook_verify_token = 'verify_me'
 google_api_key = 'AIzaSyBCWB1CSipmOAoSiPCSM7f7jrbSYqdqvcs'
 
@@ -15,7 +15,7 @@ messenger_bot_c = Botc(facebook_PAT)
 gmaps = Maps(google_api_key)
 
 @app.route('/', methods=['GET'])
-def verify_webhook():
+def verify_webhook():#webhook
 	if request.args.get('hub.mode') == 'subscribe' and request.args.get('hub.challenge'):
 		if not request.args.get('hub.verify_token') == facebook_verify_token:
 			return 'Webhook token mismatch', 403

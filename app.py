@@ -6,9 +6,9 @@ from maps import Maps
 
 app = Flask(__name__)
 
-facebook_PAT = 'EAAEqKYCvnZAgBAJV7XoVY9QBOWCGbhkbivmnC0gzlD1KWRSkGwTbUFmc6cJEYIX1cr1MNAEj30yzS9ZAygZADRZC7YDSPLpT4yjQf7HoW6fvvTiqF2WgtagZAOZCZC7bbpfmxVX2Xtqh7EN8UUbFnSrk4pZCGtv0vBlgUrCjgQGxJgZDZD'
-facebook_verify_token = 'verify_me'
-google_api_key = 'AIzaSyBCWB1CSipmOAoSiPCSM7f7jrbSYqdqvcs'
+facebook_PAT = 'pat_here'
+facebook_verify_token = '_token_here'
+google_api_key = 'you_api_here'
 
 messenger_bot = Bot(facebook_PAT)
 messenger_bot_c = Botc(facebook_PAT)
